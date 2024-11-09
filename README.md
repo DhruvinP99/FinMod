@@ -1,60 +1,46 @@
-Overview:
-This project utilizes a Long Short-Term Memory (LSTM) neural network to predict stock prices based on historical stock price data collected via Yahoo Finance (yfinance). The model aims to provide accurate predictions by training on daily price data and evaluating the Root Mean Squared Error (RMSE) to assess model performance.
+# Stock Price Prediction with LSTM
 
-Table of Contents:
--Project Structure
--Data Collection
--Model Architecture
--Training Process
--Evaluation
--Results
--Future Work
--Dependencies
--How to Run
+This project aims to build a machine learning model to predict stock prices using historical data from Yahoo Finance and an LSTM (Long Short-Term Memory) model. The main goal is to achieve a low root mean squared error (RMSE) while training the model for a full 100 epochs, even if early stopping conditions are met.
 
-Project Structure:
-data/: Folder for storing raw and processed stock data.
-README.md: Project overview and instructions.
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Dataset](#dataset)
+- [Model Architecture](#model-architecture)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Results](#results)
+- [Contributing](#contributing)
+- [License](#license)
 
-Data Collection:
-Historical stock price data is retrieved from Yahoo Finance using the yfinance library. 
+## Project Overview
 
-Key features include:
-Date
-Open, High, Low, Close prices
-Volume
-The data is split into training and test sets for model evaluation.
+The project is part of my Big Data Analysis and Deep Learning classes at Loyola University Chicago. The primary objective is to predict future stock prices using historical stock price data. This README provides a complete overview of the setup, model training process, and key evaluation metrics.
 
-Model Architecture:
-The model uses an LSTM neural network, well-suited for time series prediction due to its ability to capture long-term dependencies in data. Key layers in the model:
+**Key Objectives:**
+- Use an LSTM-based model to predict stock prices.
+- Achieve a target RMSE near 1 or 5.
+- Train the model over 100 epochs without early stopping, regardless of convergence in loss values.
+- Output prediction results as graphs and CSV files.
 
-LSTM layer(s): Capture sequential patterns in stock prices.
-Dense layer: Provides final predictions.
-Training Process
-The model trains for a specified number of epochs, with loss calculated at each epoch. Early stopping criteria are disabled to ensure the model trains fully for 100 epochs.
+## Dataset
 
-Key parameters include:
-Epochs: 100
-Loss Function: Mean Squared Error
-Optimizer: Adam
-Evaluation
-The model is evaluated using RMSE, aiming for a target RMSE near 1 or 5, as per the project goals. Validation losses are also tracked but do not impact training duration.
+This project utilizes historical stock price data obtained from Yahoo Finance via the `yfinance` library. The data includes:
+- Daily closing prices
+- Timestamps for each trading day
 
-Results
-The model outputs include:
+Additional pre-processing steps ensure the data is normalized and structured for input into the LSTM model.
 
-Predicted vs. actual stock prices over time
-RMSE scores
-CSV files with predictions for further analysis
+## Model Architecture
 
-Future Work
-Integrate advanced hyperparameter tuning techniques.
-Experiment with additional data features or alternative architectures.
-Enhance prediction visualization using a heatmap.
+The LSTM model architecture consists of multiple layers to capture temporal dependencies in stock price data effectively:
+1. **LSTM Layers**: To learn from the sequence data over time.
+2. **Dense Layers**: To output the final predictions.
 
-Dependencies
-Python 3.7+
-tensorflow
-yfinance
-pandas
-matplotlib
+We use RMSE as the main evaluation metric and aim for the lowest possible error by fine-tuning hyperparameters through custom n-fold cross-validation and a manual grid search.
+
+## Installation
+
+To run this project, you'll need Python and several libraries. Follow the steps below to set up your environment:
+
+
+
