@@ -11,7 +11,7 @@ import seaborn as sns
 # Page configuration
 st.set_page_config(
     page_title="Black-Scholes Option Pricing Model",
-    page_icon="d:\chrome download\\3d-cash-money.png",
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded")
 
@@ -123,9 +123,9 @@ class BlackScholes:
 # Sidebar for User Inputs
 with st.sidebar:
     st.title("📊 Black-Scholes Model")
-    st.write("Created by: Dhruvin Patel")
+    st.write("`Created by:`")
     linkedin_url = "https://www.linkedin.com/in/dhruvin-patel99/"
-    st.markdown(f'<a href="{linkedin_url}" target="_blank" style="text-decoration: none; color: inherit;"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="25" height="25" style="vertical-align: middle; margin-right: 10px;">`Dhruvin Patel`</a>', unsafe_allow_html=True)
+    st.markdown(f'<a href="{linkedin_url}" target="_blank" style="text-decoration: none; color: inherit;"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="25" height="25" style="vertical-align: middle; margin-right: 10px;">Dhruvin Patel</a>', unsafe_allow_html=True)
 
     current_price = st.number_input("Current Asset Price", value=100.0)
     strike = st.number_input("Strike Price", value=100.0)
