@@ -76,9 +76,7 @@ class BlackScholes:
         self.volatility = volatility
         self.interest_rate = interest_rate
 
-    def calculate_prices(
-        self,
-    ):
+    def calculate_prices(self):
         time_to_maturity = self.time_to_maturity
         strike = self.strike
         current_price = self.current_price
@@ -86,35 +84,65 @@ class BlackScholes:
         interest_rate = self.interest_rate
 
         d1 = (
-            log(current_price / strike) +
-            (interest_rate + 0.5 * volatility ** 2) * time_to_maturity
-            ) / (
-                volatility * sqrt(time_to_maturity)
-            )
+            log(current_price / strike)
+            + (interest_rate + 0.5 * volatility ** 2) * time_to_maturity
+        ) / (volatility * sqrt(time_to_maturity))
         d2 = d1 - volatility * sqrt(time_to_maturity)
 
+        # Option Prices
         call_price = current_price * norm.cdf(d1) - (
-            strike * exp(-(interest_rate * time_to_maturity)) * norm.cdf(d2)
+            strike * exp(-interest_rate * time_to_maturity) * norm.cdf(d2)
         )
         put_price = (
-            strike * exp(-(interest_rate * time_to_maturity)) * norm.cdf(-d2)
+            strike * exp(-interest_rate * time_to_maturity) * norm.cdf(-d2)
         ) - current_price * norm.cdf(-d1)
+
+        # Greeks Calculations
+        # Delta
+        self.call_delta = norm.cdf(d1)
+        self.put_delta = self.call_delta - 1
+
+        # Gamma
+        self.gamma = norm.pdf(d1) / (current_price * volatility * sqrt(time_to_maturity))
+
+        # Vega
+        self.vega = current_price * norm.pdf(d1) * sqrt(time_to_maturity)
+
+        # Theta
+        self.call_theta = (
+            -current_price * norm.pdf(d1) * volatility / (2 * sqrt(time_to_maturity))
+            - interest_rate
+            * strike
+            * exp(-interest_rate * time_to_maturity)
+            * norm.cdf(d2)
+        )
+        self.put_theta = (
+            -current_price * norm.pdf(d1) * volatility / (2 * sqrt(time_to_maturity))
+            + interest_rate
+            * strike
+            * exp(-interest_rate * time_to_maturity)
+            * norm.cdf(-d2)
+        )
+
+        # Rho
+        self.call_rho = (
+            strike
+            * time_to_maturity
+            * exp(-interest_rate * time_to_maturity)
+            * norm.cdf(d2)
+        )
+        self.put_rho = (
+            -strike
+            * time_to_maturity
+            * exp(-interest_rate * time_to_maturity)
+            * norm.cdf(-d2)
+        )
 
         self.call_price = call_price
         self.put_price = put_price
 
-        # GREEKS
-        # Delta
-        self.call_delta = norm.cdf(d1)
-        self.put_delta = 1 - norm.cdf(d1)
-
-        # Gamma
-        self.call_gamma = norm.pdf(d1) / (
-            strike * volatility * sqrt(time_to_maturity)
-        )
-        self.put_gamma = self.call_gamma
-
         return call_price, put_price
+
 
 # Function to generate heatmaps
 # ... your existing imports and BlackScholes class definition ...
@@ -238,3 +266,30 @@ with col2:
     st.subheader("Put Price Heatmap")
     _, heatmap_fig_put = plot_heatmap(bs_model, spot_range, vol_range, strike)
     st.pyplot(heatmap_fig_put)
+
+# Display Greeks
+st.header("Option Greeks")
+
+# Create a DataFrame for Greeks
+greeks_data = {
+    "Greek": ["Delta", "Gamma", "Vega", "Theta", "Rho"],
+    "Call Option": [
+        f"{bs_model.call_delta:.4f}",
+        f"{bs_model.gamma:.4f}",
+        f"{bs_model.vega:.4f}",
+        f"{bs_model.call_theta:.4f}",
+        f"{bs_model.call_rho:.4f}",
+    ],
+    "Put Option": [
+        f"{bs_model.put_delta:.4f}",
+        f"{bs_model.gamma:.4f}",  # Gamma is the same for call and put
+        f"{bs_model.vega:.4f}",
+        f"{bs_model.put_theta:.4f}",
+        f"{bs_model.put_rho:.4f}",
+    ],
+}
+
+greeks_df = pd.DataFrame(greeks_data)
+
+# Display in a styled table
+st.table(greeks_df)
