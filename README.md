@@ -61,3 +61,7 @@ The model is trained using the **RMSE (Root Mean Squared Error)** as the primary
 
 ```bash
 pip install -r requirements.txt
+
+### Streamlit
+- Streamlit run "Directory of file"
+
